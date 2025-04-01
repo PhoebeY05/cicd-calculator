@@ -1,0 +1,19 @@
+name: CI/CD Pipeline
+on: [pull_request, workflow_dispatch] # workflow_dispatch = manually trigger
+jobs:
+  unit-tests: # job ID
+    runs-on: ubuntu-latest # runner => creates VM
+    steps: # sequential + prepares VM for end result
+      - name: Fetch repository 
+        uses: actions/checkout@v4 # Fetch data in repository
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn' # package manager
+      - name: Install dependencies
+        run: |
+          yarn
+      - name: Run unit tests
+        run: |
+          NODE_ENV=production yarn test
